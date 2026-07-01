@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppConstant {
-  static String appName = 'Nes Coffee';
+  static String appName = 'Pitchakorn App';
   static TextStyle h1Style() {
     return TextStyle(fontSize: 48, fontWeight: .bold);
   }
