@@ -2,18 +2,18 @@
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 
-class IconButton extends StatelessWidget {
-  const IconButton({
+class ButtonWiget extends StatelessWidget {
+  const ButtonWiget({
     Key? key,
-    required this.icon,
     required this.onPressed,
+    required this.text,
   }) : super(key: key);
 
-  final Widget icon;
   final Function() onPressed;
-
+  final String text;
+  
   @override
   Widget build(BuildContext context) {
-    return GFIconButton(icon: icon, onPressed: onPressed);
+    return GFButton(onPressed: onPressed, text: text,);
   }
 }

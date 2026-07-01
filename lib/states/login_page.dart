@@ -1,11 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitchakornapp/cores/app_constant.dart';
+import 'package:pitchakornapp/cores/app_controller.dart';
+import 'package:pitchakornapp/cores/app_service.dart';
+import 'package:pitchakornapp/widgets/button_widget.dart';
+import 'package:pitchakornapp/widgets/form_widget.dart';
 import 'package:pitchakornapp/widgets/images_widget.dart';
-import '../cores/app_constant.dart';
-import '../widgets/form_widget.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  AppController appController = Get.put(
+    AppController(),
+  ); //นี่คือ instance ของ AppController และนำไปใช้ใน login page
+
+  final formKey = GlobalKey<FormState>();
+
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -15,34 +32,89 @@ class LoginPage extends StatelessWidget {
           children: [
             Column(
               children: [
+                SizedBox(height: 80),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(width: Get.width * 0.7, child: ImagesWidget()),
+                    SizedBox(width: Get.width * 0.8, child: ImagesWidget()),
                   ],
                 ),
-                SizedBox(height: 20),
 
-                Text(AppConstant.appName, style: AppConstant.h1Style()),
+                SizedBox(height: 16),
 
-                SizedBox(height: 20),
+                Text(AppConstant.appName, style: AppConstant.h2Style()),
+
+                SizedBox(height: 16),
 
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 32),
-                  child: Column(
-                    children: [
-                      FormWidget(hint: 'username', suffixIcon: Icon(Icons.person)),
+                  margin: EdgeInsets.symmetric(horizontal: 32),
+                  child: Form(
+                    key: formKey,
+                    child: Column(
+                      children: [
+                        FormWidget(
+                          controller: usernameController,
+                          hint: 'Username',
+                          suffixIcon: Icon(Icons.person_outline),
+                          validator: (p0) {
+                            if (p0?.isEmpty ?? true) {
+                              return 'please fill username';
+                            } else {
+                              return null;
+                            }
+                          },
+                        ),
 
-                      SizedBox(height: 20),
+                        SizedBox(height: 16),
 
-                      FormWidget(hint: 'password', suffixIcon: Icon(Icons.lock)),
-                    ],
+                        Obx(
+                          () => FormWidget(
+                            controller: passwordController,
+                            validator: (p0) {
+                              if (p0?.isEmpty ?? true) {
+                                return 'please fill password';
+                              } else {
+                                return null;
+                              }
+                            },
+
+                            obscureText: appController.redEye.value,
+                            hint: 'Password',
+                            suffixIcon: IconButton(
+                              onPressed: () {
+                                appController.redEye.value =
+                                    !appController.redEye.value;
+                              },
+                              icon: Icon(
+                                appController.redEye.value
+                                    ? Icons.remove_red_eye
+                                    : Icons.remove_red_eye_outlined,
+                              ), //ตาเปิดปิด
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
-                Text('password', style: AppConstant.h2Style()),
-                Text('Login Page', style: AppConstant.h3Style()),
-                Text('button login', style: AppConstant.h3Style()),
+                SizedBox(height: 16),
+
+                SizedBox(
+                  width: Get.width * 0.8,
+                  child: ButtonWiget(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        AppService().checkLogin(
+                          username: usernameController.text,
+                          password: passwordController.text, context: context,
+                        );
+                      }
+                    },
+                    text: 'Login',
+                  ),
+                ),
               ],
             ),
           ],

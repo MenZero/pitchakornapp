@@ -5,13 +5,6 @@ class MainHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Main Home'),
-      ),
-      body: Center(
-        child: Text('Main Home Page'),
-      ),
-    );
+    return Scaffold();
   }
 }
